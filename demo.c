@@ -45,6 +45,16 @@ main(int, char*[])
 	assert(l->head == nil);
 	
 	free(l);
+	
+	// Try destroy
+	
+	l = list_create();
+	
+	list_append(l, &str[0]);
+	list_append(l, &str[5]);
+	list_append(l, &str[1]);
+	
+	list_destroy(l);
 
 	/* Trie */
 	
