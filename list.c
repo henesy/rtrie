@@ -11,9 +11,9 @@ list_create(void)
 	return ecalloc(1, sizeof (List));
 }
 
-// Append to the end of a list
+// Append to the end of a list ;; return node inserted
 // O(n) runtime, jfc, just add a tail tracker or prepend
-void
+Node*
 list_append(List* l, void* d)
 {
 	if(l == nil)
@@ -29,7 +29,7 @@ list_append(List* l, void* d)
 		l->head = new;
 		new->next = nil;
 
-		return;
+		return new;
 	}
 
 	// Walk until the end of the list
@@ -39,7 +39,35 @@ list_append(List* l, void* d)
 	n->next = new;
 	new->next = nil;
 
-	return;
+	return new;
+}
+
+// Search → confirm whether a list contains an element ;; return true or false
+// O(n) runtime
+int
+list_contains(List *l, void *tofind, int(*comp)(void *, void *))
+{
+	Node *n;
+
+	for(n = l->head; n != nil; n = n->next)
+		if((*comp)(n->dat, tofind))
+			return 1;
+
+	return 0;
+}
+
+// Search → return node if found or nil
+// O(n) runtime
+Node*
+list_find(List *l, void *tofind, int(*comp)(void *, void *))
+{
+	Node *n;
+
+	for(n = l->head; n != nil; n = n->next)
+		if((*comp)(n->dat, tofind))
+			return n;
+
+	return nil;
 }
 
 // Search → delete from a list first match found ;; return the datum stored

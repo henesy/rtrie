@@ -5,9 +5,6 @@
 
 /* A utf-8 rune-oriented trie */
 
-// Comparator for runes in a list
-int	runecomp(void*, void*);
-
 // Create and return a new trie
 Trie*
 trie_create(void)
@@ -17,29 +14,22 @@ trie_create(void)
 
 // Insert a utf-8 string into the trie 
 void
-trie_insert(Trie *t, uint *characters)
+trie_insert(Trie *t, uint *runes)
 {
-	Rune *runes;
 	int i;
 	long len;
 	List *l;
+	Node *n;
 	
 	l = t->root;
 	
-	runes = runesmprint("%S", characters);
-	
 	len = runestrlen(runes);
-	
-	//fprint(2, "Len: %ld\nStr: %S\n", len, runes);
-	
+
 	// For each rune
 	for(i = 0; i < len; i++){
 		// Check if the rune is in the list, laterally
-		
 		// If not present, push the rune in to the lateral list
 		
 		// Descend perpendicularly
 	}
-	
-	free(runes);
 }
