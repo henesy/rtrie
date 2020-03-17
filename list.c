@@ -16,58 +16,56 @@ list_create(void)
 void
 list_append(List* l, void* p)
 {
-	int i;
+	if(l == nil)
+		return;
+
 	Node* new = ecalloc(1, sizeof(Node));
 	new->dat = p;
 	new->next = nil;
 	Node* n = l->head;
 	
-	if(l->size == 0){
+	if(l->head == nil){
 		l->head = new;
 		new->next = nil;
-		l->size++;
 		return;
 	}
 
-	for(i = 0; i < l->size; i++){
-		if(i != l->size-1)
-			n = n->next;
-	}
+	for(n = l->head; n->next != nil; n = n->next)
+		;
 	
 	n->next = new;
 	new->next = nil;
-	l->size++;
 	return;
 	
 }
 
 // Search → delete from a list ;; return the datum stored
+// The comparator should return 1 if matched exactly, 0 otherwise
 // O(n) runtime
 void*
 list_remove(List* l, void* tofind, int(*comp)(void *, void *))
 {
-	int i;
 	void* dat = nil;
-	Node* n = l->head;
+	Node* n;
 	Node* prev = nil;
-	
-	if(l->size == 0){
-		return dat;
+
+	if(l->head == nil){
+		return nil;
 	}
 
-	for(i = 0; i < l->size; i++){
+	for(n = l->head; n != nil; n = n->next){
 		if((*comp)(n->dat, tofind)){
-			if(l->size == 1){
+			if(l->head->next == nil){
 				// 1 node
 				dat = n->dat;
 				free(n);
 				l->head = nil;
-			}else if(i == 0){
+			}else if(l->head == nil){
 				// 0 nodes
 				l->head = n->next;
 				dat = n->dat;
 				free(n);
-			}else if(i == l->size-1){
+			}else if(n->next == nil){
 				// We are the last node
 				prev->next = nil;
 				dat = n->dat;
@@ -78,14 +76,10 @@ list_remove(List* l, void* tofind, int(*comp)(void *, void *))
 				dat = n->dat;
 				free(n);
 			}
-			l->size--;
 			return dat;
 		}
 		
-		prev = n;
-		if(i != l->size-1)
-			n = n->next;
-			
+		prev = n;			
 	}
 	return dat;
 }
